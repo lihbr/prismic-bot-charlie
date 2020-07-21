@@ -1,5 +1,5 @@
-# PROJECT_NAME
+# misc-prismic-charlie
 
 ## About
 
-Project description
+A simple Slack bot to help the DevExp team filter mentions

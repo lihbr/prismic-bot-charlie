@@ -1,24 +1,38 @@
 {
-  "name": "NAME",
-  "version": "0.0.0",
-  "description": "DESCRIPTION",
+  "name": "misc-prismic-charlie",
+  "version": "1.0.0",
+  "description": "A simple Slack bot to help the DevExp team filter mentions",
   "private": true,
   "author": "lihbr <hello@lihbr.com> (https://lihbr.com)",
   "license": "SEE LICENSE IN LICENSE",
-  "scripts": {},
+  "scripts": {
+    "generate": "exit 0",
+    "dev": "netlify dev --offline --port=3000",
+    "lint": "eslint --ext .js --ignore-path .gitignore ."
+  },
   "engines": {
     "node": ">=10.16.3",
     "yarn": ">=1.13.0"
   },
   "husky": {
     "hooks": {
+      "pre-commit": "yarn lint",
       "commit-msg": "commitlint --env HUSKY_GIT_PARAMS"
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "8.2.0",
+    "isomorphic-unfetch": "3.0.0",
+    "qs": "6.9.4"
+  },
   "devDependencies": {
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
-    "husky": "4.2.5"
+    "babel-eslint": "10.1.0",
+    "eslint": "7.5.0",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-prettier": "3.1.4",
+    "husky": "4.2.5",
+    "prettier": "2.0.5"
   }
 }

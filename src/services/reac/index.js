@@ -1,6 +1,7 @@
 /**
  * Import
  */
+const config = require("./config.json");
 const controllers = require("./controllers");
 
 /**
@@ -9,11 +10,14 @@ const controllers = require("./controllers");
 const event = async body => {
   switch (body.event.type) {
     case "reaction_added":
-      if (
-        body.event.reaction === process.env.REAC_REACTION &&
-        body.event.item.channel === process.env.REAC_INPUT
-      ) {
-        await controllers.messages.forward(body);
+      for (const route of config.messages) {
+        if (
+          body.event.reaction === route.reaction &&
+          body.event.item.channel === route.from
+        ) {
+          await controllers.messages.forward(body, route);
+          break;
+        }
       }
       break;
 

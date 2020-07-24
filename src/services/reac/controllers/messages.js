@@ -3,7 +3,7 @@
  */
 const slack = require("../../../helpers/slack");
 
-const forward = async body => {
+const forward = async (body, route) => {
   const message = (
     await (
       await slack.get("/conversations.history", {
@@ -16,15 +16,15 @@ const forward = async body => {
   ).messages[0];
 
   if (message) {
-    const reaction = message.reactions.find(
-      i => i.name === process.env.REAC_REACTION
-    );
+    const reaction = message.reactions.find(i => i.name === route.reaction);
     if (reaction.count === 1) {
-      return await slack.post("/chat.postMessage", {
-        channel: process.env.REAC_OUTPUT,
-        text: message.text,
-        attachments: message.attachments
-      });
+      for (const channel of route.to) {
+        slack.post("/chat.postMessage", {
+          channel,
+          text: message.text,
+          attachments: message.attachments
+        });
+      }
     }
   }
 };

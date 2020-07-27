@@ -11,10 +11,10 @@ const {
 } = require("./helpers/response");
 const slack = require("./helpers/slack");
 
-const reac = require("./services/reac");
+const mntn = require("./services/mntn");
 
 const eventRouting = {
-  reaction_added: reac.handler.event
+  reaction_added: mntn.handler.event
 };
 
 /**

@@ -28,7 +28,7 @@ const getAlert = async rule => {
 };
 
 const isFirstReactionOfKind = (message, reaction) => {
-  const reactionData = message.reactions.find(i => i.name === reaction);
+  const reactionData = (message.reactions || []).find(i => i.name === reaction);
   return reactionData && reactionData.count === 1;
 };
 
@@ -61,7 +61,7 @@ const blacklist = async (body, rule) => {
   // Exit if ambiguous
   if (message.attachments.length > 1) {
     return slack.post("/chat.postMessage", {
-      channel,
+      channel: body.event.item.channel,
       thread_ts: message.ts,
       text: "Message contains multiple mentions, this is ambiguous~",
       blocks: blocks.blacklistAmbiguous()
@@ -77,13 +77,14 @@ const blacklist = async (body, rule) => {
   const blocked_sites = [...alert.blocked_sites, newSite]
     .map(site => site.replace(/^http:\/\//i, "https://").replace(/\/$/, ""))
     .sort();
+  console.log(blockes_sites);
   await mention.put(`/accounts/${rule.account_id}/alerts/${rule.alert_id}`, {
     blocked_sites
   });
 
   // Notify Slack
   slack.post("/chat.postMessage", {
-    channel,
+    channel: body.event.item.channel,
     thread_ts: message.ts,
     text: `Site ${newSite.replace(
       /^https?:\/\//i,

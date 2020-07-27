@@ -77,7 +77,7 @@ const blacklist = async (body, rule) => {
   const blocked_sites = [...alert.blocked_sites, newSite]
     .map(site => site.replace(/^http:\/\//i, "https://").replace(/\/$/, ""))
     .sort();
-  console.log(blockes_sites);
+  console.log(blocked_sites);
   await mention.put(`/accounts/${rule.account_id}/alerts/${rule.alert_id}`, {
     blocked_sites
   });

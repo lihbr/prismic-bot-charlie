@@ -76,11 +76,16 @@ const blacklist = async (body, rule) => {
   // Update mention
   const blocked_sites = [...alert.blocked_sites, newSite]
     .map(site => site.replace(/^http:\/\//i, "https://").replace(/\/$/, ""))
+    .filter((value, index, self) => self.indexOf(value) === index)
     .sort();
   console.log(blocked_sites);
-  await mention.put(`/accounts/${rule.account_id}/alerts/${rule.alert_id}`, {
-    blocked_sites
-  });
+  const put = await mention.put(
+    `/accounts/${rule.account_id}/alerts/${rule.alert_id}`,
+    {
+      blocked_sites
+    }
+  );
+  console.log(put);
 
   // Notify Slack
   slack.post("/chat.postMessage", {

@@ -6,7 +6,7 @@ const fetch = require("isomorphic-unfetch");
 const put = async (endpoint, body) => {
   return await fetch(`${process.env.MENTION_API}${endpoint}`, {
     headers: {
-      accept: "application/json",
+      "content-type": "application/json",
       "accept-version": "1.19",
       authorization: `Bearer ${process.env.MENTION_TOKEN}`
     },

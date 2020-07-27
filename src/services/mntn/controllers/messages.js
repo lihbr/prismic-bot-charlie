@@ -60,12 +60,13 @@ const blacklist = async (body, rule) => {
 
   // Exit if ambiguous
   if (message.attachments.length > 1) {
-    return slack.post("/chat.postMessage", {
+    slack.post("/chat.postMessage", {
       channel: body.event.item.channel,
       thread_ts: message.ts,
       text: "Message contains multiple mentions, this is ambiguous~",
       blocks: blocks.blacklistAmbiguous()
     });
+    return;
   }
 
   // Extract link from message
@@ -78,14 +79,9 @@ const blacklist = async (body, rule) => {
     .map(site => site.replace(/^http:\/\//i, "https://").replace(/\/$/, ""))
     .filter((value, index, self) => self.indexOf(value) === index)
     .sort();
-  console.log(blocked_sites);
-  const put = await mention.put(
-    `/accounts/${rule.account_id}/alerts/${rule.alert_id}`,
-    {
-      blocked_sites
-    }
-  );
-  console.log(put);
+  mention.put(`/accounts/${rule.account_id}/alerts/${rule.alert_id}`, {
+    blocked_sites
+  });
 
   // Notify Slack
   slack.post("/chat.postMessage", {

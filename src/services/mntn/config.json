@@ -16,7 +16,8 @@
       "from": "C9WABC9CH",
       "reaction": "waving_black_flag",
       "account_id": "870564_3xtx96rtugmcs4sokw4gowgskc8cg0ssws0so4okko00ggooko",
-      "alert_id": "1668422"
+      "alert_id": "1668422",
+      "unblacklistable": ["twitter.com"]
     }
   ]
 }

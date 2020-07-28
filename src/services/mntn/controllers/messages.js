@@ -74,6 +74,19 @@ const blacklist = async (body, rule) => {
     /^https?:\/\/[^\/]+/
   )[0];
 
+  // Exit if unblacklistable
+  for (const site of rule.unblacklistable) {
+    if (newSite.includes(site)) {
+      slack.post("/chat.postMessage", {
+        channel: body.event.item.channel,
+        thread_ts: message.ts,
+        text: `${site} is marked as non-blacklistable~`,
+        blocks: blocks.blacklistUnblacklistable(newSite)
+      });
+      return;
+    }
+  }
+
   // Update mention
   const blocked_sites = [...alert.blocked_sites, newSite]
     .map(site => site.replace(/^http:\/\//i, "https://").replace(/\/$/, ""))

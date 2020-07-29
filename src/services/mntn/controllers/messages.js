@@ -46,6 +46,8 @@ const forward = async (body, rule) => {
   }
 };
 
+const blacklistCache = {};
+
 const blacklist = async (body, rule) => {
   // Get message and alert
   const [message, alert] = await Promise.all([
@@ -73,6 +75,14 @@ const blacklist = async (body, rule) => {
   const newSite = message.attachments[0].title_link.match(
     /^https?:\/\/[^\/]+/
   )[0];
+
+  // Prevent spam if API is slow
+  const now = Date.now();
+  if (blacklistCache[newSite] && blacklistCache[newSite] > now - 30 * 1000) {
+    blacklistCache[newSite] = now;
+    return;
+  }
+  blacklistCache[newSite] = now;
 
   // Update mention
   const blocked_sites = [...alert.blocked_sites, newSite]

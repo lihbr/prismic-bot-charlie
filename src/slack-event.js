@@ -36,12 +36,6 @@ const ctrl = {
       return json({ body: body.challenge });
     }
 
-    await new Promise(res =>
-      setTimeout(() => {
-        res();
-      }, 4000)
-    );
-
     // Don't answer to Slack retry attempts
     if (
       event.headers["x-slack-retry-num"] &&

@@ -36,16 +36,17 @@ const ctrl = {
       return json({ body: body.challenge });
     }
 
-    // Handle event under 3s
-    if (!event.headers["x-functions-slack-event"]) {
-      fetch(`${process.env.BOT_URL}${process.env.BOT_API}/slack-event`, {
-        headers: {
-          ...event.headers,
-          "x-functions-slack-event": true
-        },
-        method: "POST",
-        body: event.body
-      });
+    await new Promise(res =>
+      setTimeout(() => {
+        res();
+      }, 4000)
+    );
+
+    // Don't answer to Slack retry attempts
+    if (
+      event.headers["x-slack-retry-num"] &&
+      parseInt(event.headers["x-slack-retry-num"]) > 0
+    ) {
       return empty();
     }
 

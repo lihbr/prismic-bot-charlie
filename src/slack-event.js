@@ -31,7 +31,7 @@ const ctrl = {
     // Get body
     const body = slack.parseBody(event);
 
-    // Return challeng is any
+    // Return challenge is any
     if (body.challenge) {
       return json({ body: body.challenge });
     }

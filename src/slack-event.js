@@ -2,6 +2,7 @@
  * Import
  */
 require("dotenv").config();
+const fetch = require("isomorphic-unfetch");
 
 const request = require("./helpers/request");
 const {
@@ -33,6 +34,19 @@ const ctrl = {
     // Return challeng is any
     if (body.challenge) {
       return json({ body: body.challenge });
+    }
+
+    // Handle event under 3s
+    if (!event.headers["x-functions-slack-event"]) {
+      fetch(`${process.env.BOT_URL}${process.env.BOT_API}/slack-event`, {
+        headers: {
+          ...event.headers,
+          "x-functions-slack-event": true
+        },
+        method: "POST",
+        body: event.body
+      });
+      return empty();
     }
 
     // Normalize body

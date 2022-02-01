@@ -1,4 +1,4 @@
-# misc-prismic-charlie
+# prismic-bot-charlie
 
 ## About
 
